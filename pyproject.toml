@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "skypro-diplom"
+version = "0.1.0"
+description = ""
+authors = ["Oleg <oleg.a.matyash@gmail.com>"]
+readme = "README.md"
+packages = [{include = "skypro_diplom"}]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+Django = "^4.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
