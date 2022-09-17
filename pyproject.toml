@@ -9,6 +9,8 @@ packages = [{include = "skypro_diplom"}]
 [tool.poetry.dependencies]
 python = "^3.10"
 Django = "^4.1.1"
+django-environ = "^0.9.0"
+psycopg2-binary = "^2.9.3"
 
 
 [build-system]
