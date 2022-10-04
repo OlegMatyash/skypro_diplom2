@@ -1,4 +1,12 @@
 [[package]]
+name = "admin"
+version = "0.0.1"
+description = "Develop soon"
+category = "main"
+optional = false
+python-versions = ">=3.3.0"
+
+[[package]]
 name = "asgiref"
 version = "3.5.2"
 description = "ASGI specs, helper code, and adapters"
@@ -189,10 +197,14 @@ testing = ["coverage (>=6.2)", "coverage-enable-subprocess (>=1)", "flaky (>=3.7
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.10"
-content-hash = "7fb50ffbd7e7dce1ff0cb1845466d6b86bb355329677cfd779872c13407420f3"
+python-versions = "^3.9"
+content-hash = "bdc9b49555d3b3cae59ea89ae44393197452554d169cdd60012c11d4345c2ea6"
 
 [metadata.files]
+admin = [
+    {file = "admin-0.0.1-py3-none-any.whl", hash = "sha256:4b026b98b27ae90ead73a37cc27ca112b6247a2a03f8c72c8b8e3bdc05d41051"},
+    {file = "admin-0.0.1.tar.gz", hash = "sha256:8824b40d42f345e0cf30476aea499b69d25793ab8bc37c5b07e1d4a6d814876f"},
+]
 asgiref = [
     {file = "asgiref-3.5.2-py3-none-any.whl", hash = "sha256:1d2880b792ae8757289136f1db2b7b99100ce959b2aa57fd69dab783d05afac4"},
     {file = "asgiref-3.5.2.tar.gz", hash = "sha256:4a29362a6acebe09bf1d6640db38c1dc3d9217c68e6f9f6204d72667fc19a424"},
