@@ -6,11 +6,11 @@ services:
     image: postgres:13.0-alpine
     restart: always
     env_file:
-      - src/.env
+     - src/.env
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
-      test: pg_isready -U postgres
+      test: pg_isready -U oleg -d todolist
       interval: 5s
       timeout: 3s
       retries: 3
@@ -72,6 +72,8 @@ services:
         condition: service_healthy
     networks:
       - frontend_nw
+    volumes:
+      - ./deploy/nginx/default.conf:/etc/nginx/conf.d/default.conf
 
 volumes:
   pg_data_todolist:
