@@ -29,6 +29,6 @@ jobs:
           file: Dockerfile
           builder: ${{ steps.buildx.outputs.name }}
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:${{ steps.tag.output.tag }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache,mode=max
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom2:${{ steps.tag.output.tag }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom2:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom2:buildcache,mode=max
