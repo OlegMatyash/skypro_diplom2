@@ -22,8 +22,13 @@ jobs:
         uses: dawidd6/action-get-tag@v1
         with:
           strip_v: true
-      - name: Use tag
-        run: echo ${{steps.tag.outputs.tag}}
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./src/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:${{steps.tag.outputs.tag}}
 #      - name: Build and push
 #        uses: docker/build-push-action@v2
 #        with:
