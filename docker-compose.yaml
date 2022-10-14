@@ -22,7 +22,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: src/Dockerfile
+      dockerfile: Dockerfile
     restart: always
     env_file:
       - src/.env
