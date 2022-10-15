@@ -32,13 +32,29 @@ jobs:
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:${{steps.tag.outputs.tag}}
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache,mode=max
-#      - name: Build and push
-#        uses: docker/build-push-action@v2
-#        with:
-#          context: .
-#          file: ./src/Dockerfile
-##          builder: ${{ steps.buildx.outputs.name }}
-#          push: true
-#          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:${{ steps.tag.output.tag }}
-##          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache
-##          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:buildcache,mode=max
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Get tag
+        id: tag
+        uses: dawidd6/action-get-tag@1
+        with:
+          strip_v: true
+      - name: Render template
+        run: |
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/*
+          mv deploy/env deploy/.env
+          printf "\nTAG_NAME=${{steps.tag.outputs.tag}}" >> deploy/.env
+      - name: Copy on server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "deploy/*"
+          target: diplom
+          strip_components: 1
