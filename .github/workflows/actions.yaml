@@ -46,9 +46,9 @@ jobs:
           strip_v: true
       - name: Render template
         run: |
-          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/env
-          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/docker-compose.yaml
-          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/nginx/default.conf
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt ./deploy/env
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt ./deploy/docker-compose.yaml
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt ./deploy/nginx/default.conf
           mv deploy/env deploy/.env
           printf "\nTAG_NAME=${{steps.tag.outputs.tag}}" >> deploy/.env
       - name: Copy on server
