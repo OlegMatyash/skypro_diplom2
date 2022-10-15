@@ -41,12 +41,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Get tag
         id: tag
-        uses: dawidd6/action-get-tag@1
+        uses: dawidd6/action-get-tag@v1
         with:
           strip_v: true
       - name: Render template
         run: |
-          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/*
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/env
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/docker-compose.yaml
+          echo "${{ secrets.VAULT_PASSWORD }}" | ansible-vault decrypt deploy/nginx/default.conf
           mv deploy/env deploy/.env
           printf "\nTAG_NAME=${{steps.tag.outputs.tag}}" >> deploy/.env
       - name: Copy on server
