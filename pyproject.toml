@@ -11,8 +11,7 @@ python = "^3.9"
 Django = "^4.1.1"
 django-environ = "^0.9.0"
 psycopg2-binary = "^2.9.3"
-admin = "^0.0.1"
-environ = "^1.0"
+
 
 
 [tool.poetry.dev-dependencies]
