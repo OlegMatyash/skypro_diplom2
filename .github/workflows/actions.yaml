@@ -47,14 +47,6 @@ jobs:
         uses: dawidd6/action-get-tag@v1
         with:
           strip_v: true
-      - name: Render template 0
-        run: |
-          echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
-      - name: Store artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: pass
-          path: /tmp/.vault_pass.txt
       - name: Render template
         run: |
           echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
