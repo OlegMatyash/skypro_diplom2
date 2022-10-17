@@ -38,6 +38,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       ANSIBLE_VAULT_PASSWORD_FILE: /tmp/.vault_pass.txt
+      VAULT_PASSWORD: ${{ secrets.VAULT_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -46,9 +47,17 @@ jobs:
         uses: dawidd6/action-get-tag@v1
         with:
           strip_v: true
+      - name: Render template 0
+        run: |
+          echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
+      - name: Store artifacts
+        uses: actions/upload-artifacts@v3
+        with:
+          name: pass
+          path: /tmp/.vault_pass.txt
       - name: Render template
         run: |
-          echo "${{ secrets.VAULT_PASSWORD }}" > /tmp/.vault_pass.txt
+          echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
           ansible-vault decrypt ./deploy/env
           ansible-vault decrypt ./deploy/docker-compose.yaml
           ansible-vault decrypt ./deploy/nginx/default.conf
