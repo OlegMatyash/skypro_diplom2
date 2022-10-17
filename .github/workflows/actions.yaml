@@ -37,7 +37,7 @@ jobs:
     needs: build
     runs-on: ubuntu-22.04
     env:
-      ANSIBLE_VAULT_PASSWORD_FILE=/tmp/.vault_pass.txt
+      ANSIBLE_VAULT_PASSWORD_FILE: /tmp/.vault_pass.txt
     steps:
       - name: Checkout
         uses: actions/checkout@v2
