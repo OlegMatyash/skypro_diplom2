@@ -48,10 +48,11 @@ jobs:
         with:
           strip_v: true
       - name: Render template
+        run: |
         uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
             vault_key: ${{ secrets.VAULT_PASSWORD }}
-            command: "ansible-vault decrypt deploy/env"
+            command: "ansible-vault decrypt deploy/.env"
       - name: Copy on server
         uses: appleboy/scp-action@master
         with:
