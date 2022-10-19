@@ -43,10 +43,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Get tag
-        id: tag
-        uses: dawidd6/action-get-tag@v1
+      - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
-          strip_v: true
+          vault_key: ${{ secrets.VAULT_PASSWORD }}
+          command: "ansible-vault decrypt deploy/.env"
       - name: Render template
         run: |
           echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
