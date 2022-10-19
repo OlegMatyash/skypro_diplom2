@@ -43,6 +43,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Get tag
+        id: tag
       - uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
           vault_key: ${{ secrets.VAULT_PASSWORD }}
