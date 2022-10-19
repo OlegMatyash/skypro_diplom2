@@ -53,8 +53,8 @@ jobs:
           ansible-vault decrypt ./deploy/env
           ansible-vault decrypt ./deploy/docker-compose.yaml
           ansible-vault decrypt ./deploy/nginx/default.conf
-          mv deploy/env deploy/.env
-          printf "\nTAG_NAME=${{steps.tag.outputs.tag}}" >> deploy/.env
+          mv deploy/env deploy/env
+          printf "\nTAG_NAME=${{steps.tag.outputs.tag}}" >> deploy/env
       - name: Copy on server
         uses: appleboy/scp-action@master
         with:
