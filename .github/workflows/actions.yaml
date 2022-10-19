@@ -50,7 +50,7 @@ jobs:
       - name: Render template
         run: |
           echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
-          cat /tmp/.vault_pass.txt
+#          cat /tmp/.vault_pass.txt
 #      - uses: anthonykgross/ansible-vault-cli-github-action@v1
 #        with:
 #          vault_key: ${{ secrets.VAULT_PASSWORD }}
