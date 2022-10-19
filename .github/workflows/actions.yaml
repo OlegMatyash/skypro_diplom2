@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       ANSIBLE_VAULT_PASSWORD_FILE: /tmp/.vault_pass.txt
-      VAULT_PASSWORD: ${{ secrets.VAULT_PASSWORD }}
+#      VAULT_PASSWORD: ${{ secrets.VAULT_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -50,7 +50,7 @@ jobs:
       - name: Render template
         run: |
           echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
-          cat /tmp/.vault_pass.txt
+#          cat /tmp/.vault_pass.txt
           ansible-vault decrypt ./deploy/env
           ansible-vault decrypt ./deploy/docker-compose.yaml
           ansible-vault decrypt ./deploy/nginx/default.conf
