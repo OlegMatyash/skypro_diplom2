@@ -48,7 +48,6 @@ jobs:
         with:
           strip_v: true
       - name: Render template
-        run: |
         uses: anthonykgross/ansible-vault-cli-github-action@v1
         with:
             vault_key: ${{ secrets.VAULT_PASSWORD }}
