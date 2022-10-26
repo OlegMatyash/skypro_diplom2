@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.10
 
 WORKDIR /opt/todolist
 
@@ -21,4 +21,4 @@ RUN poetry config virtualenvs.create false \
 
 COPY src/ .
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+#ENTRYPOINT ["bash", "entrypoint.sh"]
