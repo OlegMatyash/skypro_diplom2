@@ -21,4 +21,4 @@ RUN poetry config virtualenvs.create false \
 
 COPY src/ .
 
-ENTRYPOINT ["bash", "entrypoint.sh"]
+#ENTRYPOINT ["bash", "entrypoint.sh"]
