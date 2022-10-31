@@ -51,8 +51,8 @@ jobs:
             --rm \
             --env-file $(pwd)/deploy/.env \
             --entrypoint '' \
-            -v $(pwd)/deploy/nginx/static/:/opt/todolist/static/:rm \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_deplom:latest \
+            -v $(pwd)/deploy/nginx/static/:/opt/todolist/static/:rw \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:latest \
             python manage.py collectstatic -c --no-input
       - name: Copy on server
         uses: appleboy/scp-action@master

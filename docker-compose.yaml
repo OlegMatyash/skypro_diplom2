@@ -6,7 +6,7 @@ services:
     image: postgres:14.5-alpine
     restart: always
     env_file:
-     - .env
+     - src/.env
     volumes:
       - pg_data_todolist:/var/lib/postgresql/data
     healthcheck:
@@ -25,7 +25,7 @@ services:
       dockerfile: Dockerfile
     restart: always
     env_file:
-      - .env
+      - src/.env
     environment:
       POSTGRES_HOST: postgres
     depends_on:
