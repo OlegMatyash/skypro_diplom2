@@ -16,7 +16,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v4
         with:
-          images: ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/diplom
       - name: Login to DockerHub
         uses: docker/login-action@v2
         with:
@@ -52,7 +52,7 @@ jobs:
             --env-file $(pwd)/deploy/.env \
             --entrypoint '' \
             -v $(pwd)/deploy/nginx/static/:/opt/todolist/static/:rw \
-            ${{ secrets.DOCKER_HUB_USERNAME }}/skypro_diplom:latest \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/diplom:latest \
             python manage.py collectstatic -c --no-input
       - name: Copy on server
         uses: appleboy/scp-action@master
@@ -61,7 +61,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           source: "deploy/*"
-          target: skypro_diplom
+          target: diplom
           strip_components: 1
       - name: Run compose
         uses: appleboy/ssh-action@master
