@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Data assembly
         run: |
-          echo "${{ secrets.VAULT_PASSWORD }}" > /tmp/.vault_pass.txt
+          echo "$VAULT_PASSWORD" > /tmp/.vault_pass.txt
           ansible-vault decrypt deploy/.env --output deploy/.env
           printf "\nDOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" >> deploy/.env
       - name: Collect Static
