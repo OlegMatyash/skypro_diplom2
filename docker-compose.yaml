@@ -46,7 +46,7 @@ services:
       - ./src/:/opt/todolist
 
   frontend:
-    image: sermalenk/skypro-front:lesson-35
+    image: sermalenk/skypro-front:lesson-36
     restart: always
     ports:
       - "80:80"
