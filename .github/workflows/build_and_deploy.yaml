@@ -1,0 +1,84 @@
+name: Build and deploy action
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ secrets.DOCKER_HUB_USERNAME }}/diplom
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  deploy:
+    runs-on: ubuntu-22.04
+    needs: build
+    env:
+      ANSIBLE_VAULT_PASSWORD_FILE: /tmp/.vault_pass.txt
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Data assembly
+        run: |
+          echo "${{ secrets.VAULT_PASSWORD }}" > /tmp/.vault_pass.txt
+          ansible-vault decrypt deploy/.env --output deploy/.env
+          printf "\nDOCKER_HUB_USERNAME=${{ secrets.DOCKER_HUB_USERNAME }}" >> deploy/.env
+      - name: Collect Static
+        run: |
+          cp deploy/.env .env
+          docker run \
+            --user 0 \
+            --rm \
+            --env-file $(pwd)/deploy/.env \
+            --entrypoint '' \
+            -v $(pwd)/deploy/nginx/static/:/opt/todolist/static/:rw \
+            ${{ secrets.DOCKER_HUB_USERNAME }}/diplom:latest \
+            python manage.py collectstatic -c --no-input
+      - name: Copy on server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          source: "deploy/*"
+          target: diplom
+          strip_components: 1
+      - name: Run compose
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            cd diplom
+            docker compose pull
+            docker compose up -d
+      - name: Clear after deploy
+        if: always()
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          script: |
+            docker system prune -a -f
