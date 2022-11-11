@@ -23,5 +23,6 @@ urlpatterns = [
     path('ping/', health_check, name='health-check'),
     path('core/', include('core.urls')),
     path('goals/', include('goals.urls')),
+    path('bot/', include('bot.urls')),
     path('oauth/', include('social_django.urls', namespace='social'))
 ]
