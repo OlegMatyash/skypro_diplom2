@@ -141,10 +141,15 @@ class Command(BaseCommand):
         else:
             self.handle_unverified_user(msg=msg, tg_user=tg_user)
 
+    # message_id = 1
+    # from_ = MessageFrom(id=976731901, first_name='Oleg', last_name=None, username='o_matyash')
+    # chat = Chat(id=976731901, type='private', first_name='Oleg', last_name=None, username='o_matyash', title=None)
+    # text = '/start'
+
     def handle(self, *args, **options):
         offset = 0
         while True:
-            res = self.tg_client.get_updates(offset=offset)
+            res = self.tg_client.get_updates(offset=offset, timeout=1000)
             for item in res.result:
                 offset = item.update_id + 1
                 self.handle_message(msg=item.message)

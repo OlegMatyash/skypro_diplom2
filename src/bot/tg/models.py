@@ -19,7 +19,7 @@ class Chat(BaseModel):
 
 class Message(BaseModel):
     message_id: int
-    from_: MessageFrom = Field(..., alias='from')
+    from_: MessageFrom
     chat: Chat
     text: str | None = None
 
