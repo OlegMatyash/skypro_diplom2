@@ -7,11 +7,16 @@ readme = "README.md"
 packages = [{include = "skypro_diplom"}]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 django-environ = "^0.9.0"
 psycopg2-binary = "^2.9.3"
 Django = "^4.1.2"
-
+djangorestframework = "^3.14.0"
+social-auth-app-django = "^5.0.0"
+django-filter = "^22.1"
+pydantic = "^1.10.2"
+requests = "^2.28.1"
+parameterized = "^0.8.1"
 
 
 [tool.poetry.dev-dependencies]
