@@ -43,7 +43,7 @@ services:
     image: ${DOCKER_HUB_USERNAME}/diplom:latest
     restart: always
     env_file:
-      - src/.env
+      - .env
     environment:
       POSTGRES_HOST: postgres
     depends_on:
