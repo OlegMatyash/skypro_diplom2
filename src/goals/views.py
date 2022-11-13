@@ -17,7 +17,7 @@ from goals.serializers import (BoardCreateSerializer, BoardListSerializer,
 
 
 class BoardCreateView(generics.CreateAPIView):
-    permission_classes = [BoardPermission]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = BoardCreateSerializer
 
 
@@ -25,6 +25,8 @@ class BoardListView(generics.ListAPIView):
     model = Board
     permission_classes = [BoardPermission]
     serializer_class = BoardListSerializer
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['title']
     ordering = ['title']
 
     def get_queryset(self):

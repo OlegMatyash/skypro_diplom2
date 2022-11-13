@@ -145,6 +145,7 @@ class Command(BaseCommand):
     # from_ = MessageFrom(id=976731901, first_name='Oleg', last_name=None, username='o_matyash')
     # chat = Chat(id=976731901, type='private', first_name='Oleg', last_name=None, username='o_matyash', title=None)
     # text = '/start'
+    # 0ca6386c8eed27d13e26d920
 
     def handle(self, *args, **options):
         offset = 0

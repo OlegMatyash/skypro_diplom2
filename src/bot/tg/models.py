@@ -5,7 +5,7 @@ class MessageFrom(BaseModel):
     id: int
     first_name: str
     last_name: str | None = None
-    username: str
+    username: str | None = None
 
 
 class Chat(BaseModel):
@@ -19,7 +19,7 @@ class Chat(BaseModel):
 
 class Message(BaseModel):
     message_id: int
-    from_: MessageFrom
+    from_: MessageFrom = Field(alias='from')
     chat: Chat
     text: str | None = None
 
