@@ -70,7 +70,7 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           password: ${{ secrets.SSH_PASSWORD }}
           script: |
-            cd skypro_diplom
+            cd diplom
             docker compose pull
             docker compose up -d
       - name: Clear after deploy

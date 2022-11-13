@@ -40,7 +40,7 @@ services:
       - frontend_nw
 
   bot:
-    image: ${DOCKER_HUB_USERNAME}/skypro_diplom:latest
+    image: ${DOCKER_HUB_USERNAME}/diplom:latest
     restart: always
     env_file:
       - src/.env
