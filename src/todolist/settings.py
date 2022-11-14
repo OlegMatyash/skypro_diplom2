@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+from typing import Any
 
 import environ
 
@@ -22,16 +23,18 @@ env = environ.Env(
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+ROOT_DIR = environ.Path(__file__) - 3
+
 environ.Env.read_env(BASE_DIR.joinpath('.env'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG', False)
 
 ALLOWED_HOSTS = ['*']
 
@@ -45,7 +48,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'django_filters',
+    'social_django',
     'core',
+    'goals',
+    'bot',
 ]
 
 MIDDLEWARE = [
@@ -54,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -89,7 +98,7 @@ DATABASES = {
         'USER': env.str('POSTGRES_USER'),
         'PASSWORD': env.str('POSTGRES_PASSWORD'),
         'HOST': env.str('POSTGRES_HOST', default='127.0.0.1'),
-        'PORT': '5432',
+        'PORT': env.int('POSTGRES_PORT', 5432),
     }
 }
 
@@ -118,11 +127,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tbilisi'
 
 USE_I18N = True
 
 USE_TZ = True
+
+AUTH_USER_MODEL = 'core.User'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -131,9 +142,84 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR.parent.joinpath('deploy', 'nginx', 'static')
 
-AUTH_USER_MODEL = 'core.User'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+LOGGING: dict[str, Any] = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'health-check': {
+            '()': 'todolist.filters.HealthCheckFilter',
+        },
+    },
+    'formatters': {
+        'console': {
+            'format': '%(asctime)s - %(levelname)s - %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+        },
+        'sample': {
+            'format': '%(asctime)s - %(levelname)s - %(module)s - %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['health-check'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'console',
+        },
+        'project': {
+            'level': 'DEBUG',
+            'filters': ['health-check'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'sample',
+        },
+    },
+    'loggers': {
+        '': {
+            'level': 'DEBUG' if DEBUG else 'INFO',
+            'handlers': ['project'],
+        },
+        'django.server': {
+            'level': 'INFO',
+            'handlers': ['console'],
+        },
+    }
+}
+
+if env.bool('SQL_ECHO', False):
+    LOGGING['loggers'].update({
+        'django.db': {
+            'level': 'DEBUG',
+            'handlers': ['console'],
+            'propagate': False
+        }
+    })
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_VK_OAUTH2_KEY = env.str('VK_OAUTH2_KEY',)
+SOCIAL_AUTH_VK_OAUTH2_SECRET = env.str('VK_OAUTH2_SECRET')
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+SOCIAL_AUTH_VK_EXTRA_DATA = [
+    ('email', 'email'),
+]
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+RAISE_EXCEPTIONS = True
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend', ]
+}
+
+BOT_TOKEN = env.str('BOT_TOKEN', default='')
